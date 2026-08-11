@@ -1,98 +1,177 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  StatusBar,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Redirect, router } from "expo-router";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+export default function LoginScreen() {
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+    
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
 
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+      <View style={styles.header}>
+        <Text style={styles.title}>Trackr</Text>
+        <Text style={styles.subtitle}>
+          Employee Tracking & Client Visit Management
+        </Text>
+      </View>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      <View style={styles.card}>
+        <Text style={styles.heading}>Welcome Back 👋</Text>
+        <Text style={styles.description}>
+          Sign in to continue
+        </Text>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Email</Text>
+
+          <TextInput
+            placeholder="Enter your email"
+            placeholderTextColor="#999"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={styles.input}
           />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+        </View>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Password</Text>
+
+          <TextInput
+            placeholder="Enter your password"
+            placeholderTextColor="#999"
+            secureTextEntry
+            style={styles.input}
+          />
+        </View>
+
+        <TouchableOpacity style={styles.loginButton}>
+          <Text style={styles.loginText}>Login</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <Text style={styles.forgot}>
+            Forgot Password?
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <Text style={styles.footer}>
+        Version 1.0.0
+      </Text>
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={() => router.replace("/(tabs)")}
+      >
+        <Text style={styles.loginText}>Navigate in App</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+    
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+    backgroundColor: "#F5F7FA",
+    justifyContent: "space-between",
+    paddingHorizontal: 24,
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+
+  header: {
+    marginTop: 60,
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
+
   title: {
-    textAlign: 'center',
+    fontSize: 38,
+    fontWeight: "700",
+    color: "#2563EB",
   },
-  code: {
-    textTransform: 'uppercase',
+
+  subtitle: {
+    marginTop: 8,
+    fontSize: 16,
+    color: "#666",
+    lineHeight: 22,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+
+  card: {
+    backgroundColor: "#FFF",
+    borderRadius: 20,
+    padding: 24,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+  },
+
+  heading: {
+    fontSize: 28,
+    fontWeight: "700",
+    color: "#222",
+  },
+
+  description: {
+    marginTop: 6,
+    marginBottom: 24,
+    color: "#666",
+    fontSize: 15,
+  },
+
+  inputContainer: {
+    marginBottom: 18,
+  },
+
+  label: {
+    fontWeight: "600",
+    marginBottom: 8,
+    color: "#333",
+  },
+
+  input: {
+    backgroundColor: "#F3F4F6",
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 16,
+    color: "#222",
+  },
+
+  loginButton: {
+    marginTop: 12,
+    backgroundColor: "#2563EB",
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+
+  loginText: {
+    color: "#FFF",
+    fontWeight: "700",
+    fontSize: 17,
+  },
+
+  forgot: {
+    marginTop: 18,
+    textAlign: "center",
+    color: "#2563EB",
+    fontWeight: "600",
+  },
+
+  footer: {
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#888",
   },
 });
