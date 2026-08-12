@@ -1,0 +1,388 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Trackr - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-primary-fixed": "#00174b",
+                        "primary-fixed": "#dbe1ff",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "surface-container-low": "#f2f3ff",
+                        "outline-variant": "#c3c6d7",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#57657a",
+                        "inverse-on-surface": "#eef0ff",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "on-surface": "#131b2e",
+                        "on-error-container": "#93000a",
+                        "secondary": "#515f74",
+                        "tertiary-fixed": "#e0e3e5",
+                        "secondary-container": "#d5e3fc",
+                        "on-tertiary-container": "#eff1f3",
+                        "tertiary-container": "#6b6e70",
+                        "on-surface-variant": "#434655",
+                        "tertiary": "#525657",
+                        "primary": "#004ac6",
+                        "surface-dim": "#d2d9f4",
+                        "surface-container-high": "#e2e7ff",
+                        "error-container": "#ffdad6",
+                        "background": "#faf8ff",
+                        "primary-container": "#2563eb",
+                        "surface": "#faf8ff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#eeefff",
+                        "surface-bright": "#faf8ff",
+                        "error": "#ba1a1a",
+                        "surface-container": "#eaedff",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#d5e3fc",
+                        "surface-container-highest": "#dae2fd",
+                        "inverse-surface": "#283044",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#dae2fd",
+                        "outline": "#737686",
+                        "surface-tint": "#0053db",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-background": "#131b2e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "base": "8px",
+                        "container-margin": "16px",
+                        "xs": "4px",
+                        "gutter": "12px",
+                        "xl": "32px",
+                        "safe": "env(safe-area-inset-bottom)"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "display": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #faf8ff; /* surface */
+            color: #131b2e; /* on-surface */
+            -webkit-tap-highlight-color: transparent;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Bottom Sheet Animation */
+        .bottom-sheet-enter {
+            transform: translateY(100%);
+        }
+        .bottom-sheet-enter-active {
+            transform: translateY(0);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bottom-sheet-exit {
+            transform: translateY(0);
+        }
+        .bottom-sheet-exit-active {
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .backdrop-enter {
+            opacity: 0;
+        }
+        .backdrop-enter-active {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        .backdrop-exit {
+            opacity: 1;
+        }
+        .backdrop-exit-active {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen pb-[100px] md:pb-0 font-body-md text-body-md relative">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface dark:bg-surface-container-lowest border-b border-outline-variant dark:border-outline flat no shadows flex justify-between items-center px-container-margin py-md z-40">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest shrink-0 border border-outline-variant">
+
+</div>
+<span class="font-headline-lg text-headline-lg font-bold text-primary dark:text-inverse-primary cursor-pointer active:opacity-70">Trackr</span>
+</div>
+<div class="flex items-center">
+<button class="p-2 rounded-full hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors cursor-pointer active:opacity-70 flex items-center justify-center text-primary dark:text-inverse-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 0;">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="max-w-screen-md mx-auto px-container-margin py-lg space-y-lg">
+<!-- Greeting -->
+<section>
+<h1 class="font-display text-display text-on-surface">Good Morning, Asmita</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Thursday, October 26</p>
+</section>
+<!-- Status Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0px_1px_3px_rgba(0,0,0,0.05)] relative overflow-hidden flex items-center justify-between">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-outline"></div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Current Status</p>
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-outline" style="font-variation-settings: &quot;FILL&quot; 1;">trip_origin</span>
+                    Not Checked In
+                </h2>
+</div>
+<div class="w-12 h-12 bg-surface-container rounded-full flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+</section>
+<!-- Quick Actions Bento Grid -->
+<section class="grid grid-cols-2 md:grid-cols-3 gap-md">
+<button class="col-span-2 md:col-span-1 bg-primary-container text-on-primary-container rounded-xl p-md flex flex-col items-start justify-between h-32 active:scale-95 transition-transform shadow-[0px_1px_3px_rgba(0,0,0,0.05)] text-left hover:brightness-105" onclick="openCheckInSheet()">
+<div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: &quot;FILL&quot; 1;">login</span>
+</div>
+<span class="font-headline-md text-headline-md text-white font-semibold">Check In</span>
+</button>
+<button class="col-span-1 bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col items-start justify-between h-32 active:scale-95 transition-transform hover:bg-surface-container-low shadow-[0px_1px_3px_rgba(0,0,0,0.05)] text-left opacity-50 cursor-not-allowed">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-on-surface-variant" style="font-variation-settings: &quot;FILL&quot; 1;">logout</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">Check Out</span>
+</button>
+<button class="col-span-1 bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col items-start justify-between h-32 active:scale-95 transition-transform hover:bg-surface-container-low shadow-[0px_1px_3px_rgba(0,0,0,0.05)] text-left">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: &quot;FILL&quot; 1;">add_business</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold leading-tight">Add Client<br>Visit</span>
+</button>
+</section>
+<!-- Recent Visits -->
+<section>
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-md text-headline-md text-on-surface">Recent Visits</h3>
+<button class="font-label-md text-label-md text-primary font-medium hover:underline">View All</button>
+</div>
+<div class="space-y-0 border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest">
+<!-- Visit Item 1 -->
+<div class="p-md border-b border-outline-variant flex items-start gap-md hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary shrink-0 mt-1">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">corporate_fare</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-headline-md text-[16px] leading-tight text-on-surface font-semibold">Acme Corp HQ</h4>
+<span class="font-label-sm text-label-sm px-2 py-1 bg-surface-variant text-on-surface-variant rounded">YESTERDAY</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> 123 Business Rd, Tech District
+                        </p>
+<div class="mt-2 flex gap-4 font-label-md text-label-md text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">login</span> 09:00 AM
+                            </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">logout</span> 11:30 AM
+                            </div>
+<div class="flex items-center gap-1 ml-auto font-medium text-on-surface">
+<span class="material-symbols-outlined text-[14px]">timer</span> 2h 30m
+                            </div>
+</div>
+</div>
+</div>
+<!-- Visit Item 2 -->
+<div class="p-md flex items-start gap-md hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary shrink-0 mt-1">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">storefront</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-headline-md text-[16px] leading-tight text-on-surface font-semibold">Global Industries Ltd</h4>
+<span class="font-label-sm text-label-sm px-2 py-1 bg-surface-variant text-on-surface-variant rounded">OCT 24</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> 456 Industrial Pkwy
+                        </p>
+<div class="mt-2 flex gap-4 font-label-md text-label-md text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">login</span> 02:15 PM
+                            </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">logout</span> 03:45 PM
+                            </div>
+<div class="flex items-center gap-1 ml-auto font-medium text-on-surface">
+<span class="material-symbols-outlined text-[14px]">timer</span> 1h 30m
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB (Floating Action Button) -->
+<button aria-label="Add Visit" class="fixed bottom-[100px] md:bottom-lg right-container-margin w-14 h-14 bg-primary-container text-white rounded-xl shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)] flex items-center justify-center hover:bg-primary-fixed-variant transition-colors active:scale-95 z-40">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<!-- BottomNavBar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline flat no shadows flex justify-around items-center h-20 pb-safe px-md">
+<!-- Dashboard (Active) -->
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-on-secondary-fixed rounded-full px-5 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all active:scale-95 duration-100 cursor-pointer w-20" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">dashboard</span>
+<span class="font-label-md text-label-md mt-1">Dashboard</span>
+</a>
+<!-- Clients -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-secondary-container hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all active:scale-95 duration-100 cursor-pointer rounded-full px-5 py-1 w-20" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 0;">groups</span>
+<span class="font-label-md text-label-md mt-1">Clients</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-secondary-container hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all active:scale-95 duration-100 cursor-pointer rounded-full px-5 py-1 w-20" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 0;">person</span>
+<span class="font-label-md text-label-md mt-1">Profile</span>
+</a>
+</nav>
+<!-- Check-In Bottom Sheet Overlay -->
+<div class="fixed inset-0 bg-black/50 z-[60] hidden opacity-0 transition-opacity duration-300" id="checkInBackdrop" onclick="closeCheckInSheet()"></div>
+<!-- Check-In Bottom Sheet -->
+<div class="fixed bottom-0 left-0 right-0 max-w-screen-md mx-auto bg-surface-container-lowest rounded-t-[24px] z-[70] translate-y-full transition-transform duration-300 shadow-[0px_-10px_20px_rgba(0,0,0,0.1)] flex flex-col max-h-[90vh]" id="checkInSheet">
+<!-- Drag Handle -->
+<div class="w-full flex justify-center pt-3 pb-1 cursor-grab" onclick="closeCheckInSheet()">
+<div class="w-12 h-1.5 bg-outline-variant rounded-full"></div>
+</div>
+<div class="px-container-margin py-md border-b border-outline-variant flex justify-between items-center sticky top-0 bg-surface-container-lowest z-10 rounded-t-[24px]">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Confirm Check-In</h2>
+<button class="p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant" onclick="closeCheckInSheet()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="overflow-y-auto hide-scrollbar p-container-margin space-y-lg flex-1">
+<!-- Location Map Area -->
+<div class="rounded-xl overflow-hidden border border-outline-variant bg-surface-container-low relative h-40">
+<!-- Using placeholder with data-location for map -->
+<div class="w-full h-full bg-cover bg-center" data-alt="A clean, minimalist UI map view showing a generic urban street grid with a precise blue location pin marker indicating the current GPS location. High-key light mode style." data-location="San Francisco" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCBcJK0YMAPfweQoisWVQcTO5rjvXvqU-q95_LYb5iYo7w2uxK92jgRnn1edSEwgJoRwZ05JBmouZLAOJLP5em7UjhdGQ2YyV5Hw9eAw5xrDnIXPQZjuQQZbO5VEX2Zufzz9oCrO0J2xw-9snYSHngCEM4OMv1BrxqDEJ9bKYMSNvHMJUWQKtgQdZjbgplCGOwg-bSo2PO8YE75lZiS_B1Nl0FxM0K35oL5iyfEthdncXXCBFn1KkOo&quot;);"></div>
+<div class="absolute bottom-md left-md right-md bg-surface-container-lowest/90 backdrop-blur-sm p-sm rounded-lg border border-outline-variant flex items-center gap-sm shadow-sm">
+<span class="material-symbols-outlined text-primary">my_location</span>
+<div class="flex-1 min-w-0">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Current Location</p>
+<p class="font-body-md text-body-md text-on-surface truncate">123 Market St, San Francisco, CA</p>
+</div>
+</div>
+</div>
+<!-- Form -->
+<form class="space-y-md">
+<!-- Client Dropdown -->
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface-variant mb-1">Client</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface-container-lowest border border-outline-variant rounded-lg px-md py-3 text-body-lg text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-shadow pr-10">
+<option disabled="" selected="" value="">Select a client...</option>
+<option value="acme">Acme Corp</option>
+<option value="global">Global Industries</option>
+<option value="tech">TechSolutions Inc</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">arrow_drop_down</span>
+</div>
+</div>
+<!-- Purpose -->
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface-variant mb-1">Purpose of Visit</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface-container-lowest border border-outline-variant rounded-lg px-md py-3 text-body-lg text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-shadow pr-10">
+<option value="sales">Sales Meeting</option>
+<option value="support">Technical Support</option>
+<option value="delivery">Delivery</option>
+<option value="other">Other</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">arrow_drop_down</span>
+</div>
+</div>
+<!-- Notes -->
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface-variant mb-1">Notes (Optional)</label>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-md py-3 text-body-lg text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-shadow resize-none h-24" placeholder="Add any details about the visit..."></textarea>
+</div>
+</form>
+</div>
+<!-- Sticky Footer Action -->
+<div class="p-container-margin border-t border-outline-variant bg-surface-container-lowest pb-safe">
+<button class="w-full bg-primary-container text-white font-headline-md text-headline-md rounded-lg py-3 flex items-center justify-center gap-2 hover:bg-primary-fixed-variant transition-colors active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">check_circle</span>
+                Confirm Check-In
+            </button>
+</div>
+</div>
+<script>
+        function openCheckInSheet() {
+            const backdrop = document.getElementById('checkInBackdrop');
+            const sheet = document.getElementById('checkInSheet');
+            
+            backdrop.classList.remove('hidden');
+            // Small delay to allow display block to apply before animating opacity
+            setTimeout(() => {
+                backdrop.classList.add('opacity-100');
+                sheet.classList.remove('translate-y-full');
+            }, 10);
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCheckInSheet() {
+            const backdrop = document.getElementById('checkInBackdrop');
+            const sheet = document.getElementById('checkInSheet');
+            
+            backdrop.classList.remove('opacity-100');
+            sheet.classList.add('translate-y-full');
+            
+            setTimeout(() => {
+                backdrop.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300); // matches duration-300
+        }
+    </script>
+
+
+</body></html>

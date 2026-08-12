@@ -1,45 +1,60 @@
-import { View, Text, Pressable, StyleSheet } from "react-native";
-import { router } from "expo-router";
+import { useCallback } from "react";
+import { FlatList, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import type { ListRenderItemInfo } from "react-native";
 
-export default function Clients() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Clients</Text>
+import ClientCard from "@/components/client-card";
+import Header from "@/components/header";
+import SearchBar from "@/components/search-bar";
+import { DASHBOARD_USER } from "@/constants/mock-data";
+import { CLIENTS } from "@/mock/clients";
+import type { Client } from "@/types/client";
 
-      <Pressable
-        style={styles.button}
-        onPress={() => router.push("/(tabs)/clients/1")}
-      >
-        <Text style={styles.buttonText}>
-          Open Client 1
-        </Text>
-      </Pressable>
-    </View>
-  );
+const keyExtractor = (item: Client) => item.id;
+
+function ListDivider() {
+  return <View className="border-b border-outline-variant" />;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+export default function ClientsScreen() {
+  const router = useRouter();
 
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    marginBottom: 30,
-  },
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<Client>) => (
+      <ClientCard
+        client={item}
+        onPress={() =>
+          router.push({ pathname: "/clients/[id]", params: { id: item.id } })
+        }
+      />
+    ),
+    [router],
+  );
 
-  button: {
-    backgroundColor: "#2563EB",
-    paddingHorizontal: 25,
-    paddingVertical: 15,
-    borderRadius: 10,
-  },
+  return (
+    <SafeAreaView className="flex-1 bg-surface" edges={["top"]}>
+      <Header name={DASHBOARD_USER.name} />
 
-  buttonText: {
-    color: "white",
-    fontWeight: "600",
-  },
-});
+      <View className="px-container-margin pt-lg pb-lg">
+        <Text className="font-display text-display text-on-surface">
+          Clients
+        </Text>
+        <Text className="font-body-md text-body-md text-on-surface-variant mt-sm">
+          Manage and track your active client visits.
+        </Text>
+        <SearchBar className="mt-md" />
+      </View>
+
+      <FlatList
+        className="px-container-margin pb-lg"
+        data={CLIENTS}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        ItemSeparatorComponent={ListDivider}
+        contentContainerClassName="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest shadow-sm"
+        showsVerticalScrollIndicator={false}
+      />
+    </SafeAreaView>
+  );
+}
